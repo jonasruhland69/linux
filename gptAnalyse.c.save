@@ -1,0 +1,65 @@
+#define _GPT_ANALYSE_C
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
+#include "gptAnalyse.h"
+
+#define DEBUG 1
+
+
+static FILE *fp=NULL;
+/*  **************** IMPLEMENTING MMODULE       *****/
+
+
+		  BOOL gpt_open(char *gptTable) {
+			        #ifdef DEBUG
+				printf("\nDEBUG::get_open file: (%s)\n",gptTable);
+
+				fp = fopen(gptTable,"rb");
+				if (!fp) {
+						  printf("Cannot open file <%s> due to error: %s\n",gptTable,strerror(errno));
+						  return FALSE;
+				}
+                                #endif
+				return TRUE;
+		  }
+
+		  void gpt_close() {
+				puts("\nDEBUG::gpt_close\n");
+				if (fp)
+						  fclose(fp);
+		  }
+
+
+
+		  BOOL gpt_process()  {
+			// fp
+			int count = 512;
+			size_t  haveRead=0;
+			char *buffer;
+
+                        //Get buffer size
+			fseek(fp, 0, SEEK_END);
+                        haveRead = ftell(fp);
+			
+			//Set position to beginning
+			rewind(fp);
+
+			//Allocate the buffer
+			buffer = malloc((haveRead + 1) * sizeof(*buffer));
+			//read file into the buffer
+			fread(buffer, haveRead, 1, fp);
+			buffer[haveRead] = '\0';
+			printf("%d",haveRead);
+			if (haveRead == 0){
+				printf("Error in reading the file block.\n");
+				return FALSE;
+			}else{
+				printf("Signatur:\n");
+				printf("%c\n",buffer[count]);
+                                printf("process end");
+			}
+		  }
