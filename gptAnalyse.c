@@ -33,8 +33,8 @@ static FILE *fp=NULL;
 						  fclose(fp);
 		  }
 
-		  char * readBytes(int offset, int length){
-			unsigned char bytes[length];
+		  char *readBytes(int offset, int length){
+			char *bytes;
 			fseek(fp,offset,SEEK_CUR);
 			fread(bytes, 1,length,fp);
 			return bytes;
@@ -44,7 +44,6 @@ static FILE *fp=NULL;
 
 		  BOOL gpt_process() {
               // fp
-              int haveRead = 0;
               int length=0;
 
               puts("\nDEBUG::gpt_process\n");
@@ -64,7 +63,7 @@ static FILE *fp=NULL;
               //Output Header-Größe
               printf("\n\nHeader-Größe:\n");
               length=4;
-              signatur = readBytes(4, length);
+              strcpy(signatur,readBytes(4, length));
               printf("Dezimal:\n");
               for(int i = 0; i<length;i++)
                   printf("%d ", signatur[i]);
@@ -75,7 +74,7 @@ static FILE *fp=NULL;
               //Output Backup LBA
               printf("\n\nBackup LBA:\n");
               length=8;
-              signatur = readBytes(16, length);
+              strcpy(signatur,readBytes(16, length));
               printf("Dezimal:\n");
               for(int i = 0; i<length;i++)
                   printf("%d ", signatur[i]);
@@ -86,7 +85,7 @@ static FILE *fp=NULL;
               //Output Anzahl der Partitionseinträge
               printf("\n\nAnzahl der Partitionseintraege:\n");
               length=4;
-              signatur = readBytes(40, length);
+              strcpy(signatur,readBytes(40, length));
               printf("Dezimal:\n");
               for(int i = 0; i<length;i++)
                   printf("%d ", signatur[i]);
@@ -97,7 +96,7 @@ static FILE *fp=NULL;
               //Output Groesse eines Partitionseintrags
               printf("\n\nGröße eines Partitionseintrags:\n");
               length=4;
-              signatur = readBytes(0, length);
+              strcpy(signatur,readBytes(0, length));
               printf("Dezimal:\n");
               for(int i = 0; i<length;i++)
                   printf("%d ", signatur[i]);
