@@ -33,71 +33,75 @@ static FILE *fp=NULL;
 						  fclose(fp);
 		  }
 
-		  char * readBytes(long offset, int length){
-			char bytes[length];
-			fseek(fp,512L+offset,SEEK_CUR);
-			fread(bytes, length,1,fp);
+		  char * readBytes(int offset, int length){
+			unsigned char bytes[length];
+			fseek(fp,offset,SEEK_CUR);
+			fread(bytes, 1,length,fp);
 			return bytes;
 		  }
 
 
 
-		  BOOL gpt_process()  {
-			// fp
-			puts("\nDEBUG::gpt_close\n");
-			unsigned char buffer[92];
-			int haveRead = 0;
-			int gptPosition=0;
+		  BOOL gpt_process() {
+              // fp
+              int haveRead = 0;
+              int length=0;
 
-                        //Get buffer size
-			fseek(fp,512L,SEEK_CUR);
-			//read file into the buffer
-			haveRead = fread(buffer,1, 8, fp);
-			if (haveRead ==0){
-				printf("Error in reading the file block.\n");
-				return FALSE;
-			}else{
-				while(gptPosition<92){
-					printf("%02x ", buffer[gptPosition++]);
-					if(gptPosition%8==0)
-						printf("\n");
-				}
+              puts("\nDEBUG::gpt_process\n");
+              fseek(fp,512,SEEK_CUR);
 
-				gptPosition=0;
-				//Output Signatur
-				printf("\nSignatur:\n");
-				printf("%s",readBytes(0,8));
+              //Output Signatur
+              printf("\nSignatur:\n");
+              length=8;
+              char *signatur = readBytes(0, length);
+              printf("Dezimal:\n");
+              for(int i = 0; i<length;i++)
+                printf("%d ", signatur[i]);
+              printf("\nHex:\n");
+              for(int i = 0; i<length;i++)
+                  printf("0x%02x ", signatur[i]);
 
-				//Output Header-Größe
-				printf("\nHeader-Größe\n");
-				gptPosition=12;
-				while(gptPosition<16){
-					printf("%02x \n",buffer[gptPosition]);
-					gptPosition++;
-				}
+              //Output Header-Größe
+              printf("\n\nHeader-Größe:\n");
+              length=4;
+              signatur = readBytes(4, length);
+              printf("Dezimal:\n");
+              for(int i = 0; i<length;i++)
+                  printf("%d ", signatur[i]);
+              printf("\nHex:\n");
+              for(int i = 0; i<length;i++)
+                  printf("0x%02x ", signatur[i]);
 
-				//Output Backup LBA
-				printf("\nBackup LBA (location of the other header copy)\n");
-				gptPosition=32;
-				while(gptPosition<40){
-					printf("%d \n",buffer[gptPosition]);
-					gptPosition++;
-				}
+              //Output Backup LBA
+              printf("\n\nBackup LBA:\n");
+              length=8;
+              signatur = readBytes(16, length);
+              printf("Dezimal:\n");
+              for(int i = 0; i<length;i++)
+                  printf("%d ", signatur[i]);
+              printf("\nHex:\n");
+              for(int i = 0; i<length;i++)
+                  printf("0x%02x ", signatur[i]);
 
-				//Output Anzahl Partitionseinträge
-				printf("\nAnzahl der Partitionseinträge (Partitionen)\n");
-				gptPosition=80;
-				while(gptPosition<84){
-					printf("%d \n",buffer[gptPosition]);
-					gptPosition++;
-				}
+              //Output Anzahl der Partitionseinträge
+              printf("\n\nAnzahl der Partitionseintraege:\n");
+              length=4;
+              signatur = readBytes(40, length);
+              printf("Dezimal:\n");
+              for(int i = 0; i<length;i++)
+                  printf("%d ", signatur[i]);
+              printf("\nHex:\n");
+              for(int i = 0; i<length;i++)
+                  printf("0x%02x ", signatur[i]);
 
-				//Output Größe Partitionseintrag
-				printf("\nGröße eines Partitionseintrags\n");
-				gptPosition=84;
-				while(gptPosition<88){
-					printf("%d \n",buffer[gptPosition]);
-					gptPosition++;
-				}
-			}
-		  }
+              //Output Groesse eines Partitionseintrags
+              printf("\n\nGröße eines Partitionseintrags:\n");
+              length=4;
+              signatur = readBytes(0, length);
+              printf("Dezimal:\n");
+              for(int i = 0; i<length;i++)
+                  printf("%d ", signatur[i]);
+              printf("\nHex:\n");
+              for(int i = 0; i<length;i++)
+                  printf("0x%02x ", signatur[i]);
+          }
