@@ -106,7 +106,7 @@ static FILE *fp=NULL;
 
 
               //Sprung zum 513. Byte
-              fseek(fp, 513L, SEEK_SET);
+              fseek(fp, 1025, SEEK_SET);
               for (int i = 0; i < 32; i++) {
                   printf("\n\nLBA %d", i);
                   length = 16;
