@@ -109,10 +109,62 @@ static FILE *fp=NULL;
               fseek(fp, 1025, SEEK_SET);
               for (int i = 0; i < 32; i++) {
                   printf("\n\nLBA %d", i);
+
+                  printf("\nPartition type GUID:");
                   length = 16;
                   strcpy(signatur, readBytes(0, length));
                   printf("\nHex:\n");
                   for (int i = 0; i < length; i++)
-                      printf("0x%02x ", signatur[i]);
+                      printf("0x%02x \n", signatur[i]);
+
+                  printf("\nUnique partition GUID:");
+                  length = 16;
+                  strcpy(signatur, readBytes(0, length));
+                  printf("Dezimal:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("%d ", signatur[i]);
+                  printf("\nHex:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("0x%02x \n", signatur[i]);
+
+                  printf("\nFirst LBA:");
+                  length = 8;
+                  strcpy(signatur, readBytes(0, length));
+                  printf("Dezimal:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("%d ", signatur[i]);
+                  printf("\nHex:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("0x%02x \n", signatur[i]);
+
+                  printf("\nLast LBA:");
+                  length = 8;
+                  strcpy(signatur, readBytes(0, length));
+                  printf("Dezimal:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("%d ", signatur[i]);
+                  printf("\nHex:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("0x%02x \n", signatur[i]);
+
+                  printf("\nAttribute Flags:");
+                  length = 8;
+                  strcpy(signatur, readBytes(0, length));
+                  printf("Dezimal:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("%d ", signatur[i]);
+                  printf("\nHex:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("0x%02x \n", signatur[i]);
+
+                  printf("\nPartition name:");
+                  length = 72;
+                  strcpy(signatur, readBytes(0, length));
+                  printf("Dezimal:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("%d ", signatur[i]);
+                  printf("\nHex:\n");
+                  for (int i = 0; i < length; i++)
+                      printf("0x%02x \n", signatur[i]);
               }
           }
